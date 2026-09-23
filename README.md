@@ -22,13 +22,6 @@ Or from a terminal:
 bb plugin install agent-graph
 ```
 
-The marketplace listing is pending review. Until it's approved, install
-straight from this repository:
-
-```sh
-bb plugin install https://github.com/nathancolgate/bb-plugin-agent-graph.git
-```
-
 Requires bb 0.41 or newer.
 
 ## How it works

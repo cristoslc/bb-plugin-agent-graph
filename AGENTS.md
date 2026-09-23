@@ -4,11 +4,11 @@ A bb plugin that draws a live node graph of bb agents: project → thread →
 turn → tool call / subagent / workflow agent, plus child threads. See
 README.md for features and the code map.
 
-## Status (as of 2026-09-21)
+## Status (as of 2026-09-23)
 
 - v0.1.0 is released: tag `v0.1.0` on
   https://github.com/nathancolgate/bb-plugin-agent-graph (public, MIT).
-- Marketplace listing is in review:
+- Marketplace listing is live (merged 2026-09-23):
   https://github.com/get-bb/marketplace/pull/342. The listing tracks
   `^0.1.0`, so new `v0.1.x` tags reach users without another marketplace PR.
   A new PR is needed only to change the source, name, icon, description,
