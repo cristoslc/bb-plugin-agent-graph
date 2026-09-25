@@ -89,3 +89,21 @@ mockup must show motion/transition states, not static images.
   (no blank/scaled-to-zero stages), replay crossing the 64s rollover while
   switching tabs (clock wraps to t+1.6s, first-out cleared), culprit strip
   text correct, screenshots at 1000px and 1600px. Zero page errors.
+
+## 2026-09-25 15:35 — Tab 11: Enterprise MSD (for fun)
+
+- What: operator asked for an LCARS Master Systems Display take, TNG
+  Engineering style.
+- Built: lateral Enterprise profile (saucer/bridge, neck, stardrive hull,
+  twin pylons, nacelles, deflector) with LCARS chrome — title pill, numbered
+  blocks, left number column, frame. Each child thread maps to a ship system
+  (research→SENSORS, adr→COMPUTER CORE, tests→DIAGNOSTICS, review→NAVIGATION,
+  docs→LIBRARY COMPUTER, triage→DAMAGE CONTROL) with hotspot + leader line +
+  name/state callout. Tool-call rate drives power flow along the spine and
+  pylons (dash speed) and nacelle/deflector glow; waiting systems read
+  STANDBY amber, done read NOMINAL lavender and dim their leads; an error
+  strobes a red-alert frame + RED ALERT text + that system's callout until
+  acknowledged. All-quiet state: flows and glows go cold.
+- Verified: smoke suite (11 tabs), screenshots at t=8 (all systems nominal/
+  online), t=13.2 (red alert, DAMAGE CONTROL strobing), t=50 (mixed
+  NOMINAL/STANDBY). Zero page errors.

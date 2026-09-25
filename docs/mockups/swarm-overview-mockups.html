@@ -220,6 +220,29 @@
   /* m10 tracks */
   .tracknote{margin-top:8px;font-size:11px;color:#5c6c7a}
 
+  /* m11 Enterprise MSD (LCARS) */
+  .lcars{--lc-orange:#ff9c44;--lc-peach:#ff9966;--lc-gold:#ffcc66;--lc-lav:#cc99cc;--lc-blue:#99ccff}
+  .lc-frame{fill:none;stroke:var(--lc-orange);stroke-width:2}
+  .lc-ship{fill:#1b2027;stroke:var(--lc-orange);stroke-width:1.6;stroke-linejoin:round}
+  .lc-deco{fill:var(--lc-orange)}
+  .lc-glow{animation:lcglow 2.2s ease-in-out infinite}
+  @keyframes lcglow{0%,100%{opacity:.55}50%{opacity:1}}
+  .lc-alert-frame{fill:none;stroke:var(--err);stroke-width:2.5;opacity:0;pointer-events:none}
+  .msd-alert .lc-alert-frame{animation:lcalert .62s steps(2,jump-none) infinite}
+  @keyframes lcalert{0%{opacity:.95}100%{opacity:0}}
+  .lc-alerttxt{fill:var(--err);opacity:0}
+  .msd-alert .lc-alerttxt{opacity:1}
+  .lc-chip{transition:fill .4s}
+  .lc-chip.err{animation:lcalert .62s steps(2,jump-none) infinite}
+  .lc-lead{fill:none;stroke-width:1.4;opacity:.65;transition:stroke .4s,opacity .4s}
+  .lc-lead.err{opacity:1;animation:lcalert .62s steps(2,jump-none) infinite}
+  .lc-nametxt{font-family:'Avenir Next Condensed','Arial Narrow',system-ui,sans-serif;font-size:13px;letter-spacing:.16em;fill:#d6dee7}
+  .lc-subtxt{font-family:'Avenir Next Condensed','Arial Narrow',system-ui,sans-serif;font-size:10px;letter-spacing:.14em;fill:#8fa0af}
+  .lc-num{font-family:var(--mono);font-size:9px;fill:#8fa0af;letter-spacing:.08em}
+  .lc-nac{fill:var(--lc-blue);opacity:.5;animation:lcglow 1.6s ease-in-out infinite}
+  .msd-cold .lc-nac{opacity:.12;animation:none}
+  .lc-flow{fill:none;stroke:var(--lc-blue);stroke-width:2.4;opacity:.55}
+
   /* shared small legend chips */
   .leg{display:flex;gap:14px;margin:0 0 2px;flex-wrap:wrap;width:100%;max-width:640px}
   .leg span{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;display:flex;align-items:center;gap:5px;color:var(--ink-dim)}
@@ -434,6 +457,7 @@ const DEFS = [
   { t: 'Overview mimic strip', build: buildM8 },
   { t: 'Trend strips',       build: buildM9 },
   { t: 'Track diagram',      build: buildM10 },
+  { t: 'Enterprise MSD',     build: buildM11 },
 ];
 const ICS = [
   'Unit → instrument bubble → lamp on the line.',
@@ -927,6 +951,115 @@ function buildM10(host) {
           rect.setAttribute('y', t.y - 3.5);
           rect.setAttribute('fill', k.state === 'error' ? '#ff9c95' : '#d7e6f4');
         });
+      });
+    } });
+}
+
+/* ================= m11 · Enterprise MSD (LCARS) ================= */
+function buildM11(host) {
+  const W = 640, H = 360;
+  const svg = svgel('svg', { width: W, height: H, viewBox: '0 0 ' + W + ' ' + H }, host);
+  svg.classList.add('svgstage', 'lcars');
+
+  /* LCARS chrome */
+  svgel('rect', { x: 8, y: 10, width: 170, height: 30, rx: 15, class: 'lc-deco' }, svg);
+  const title = svgel('text', { x: 24, y: 31, class: 'lc-nametxt', fill: '#181008' }, svg);
+  title.textContent = 'SASHAY OPS';
+  const mkBlock = (x, w, col, num) => {
+    svgel('rect', { x: x, y: 10, width: w, height: 30, rx: 15, fill: col }, svg);
+    const t = svgel('text', { x: x + w / 2, y: 30, 'text-anchor': 'middle', class: 'lc-num', fill: '#181008' }, svg);
+    t.textContent = num;
+  };
+  mkBlock(186, 64, '#ff9966', '47');
+  mkBlock(258, 48, '#ffcc66', '2338');
+  /* left number column */
+  ['#ff9966', '#cc99cc', '#ffcc66', '#99ccff'].forEach((col, i) => {
+    svgel('rect', { x: 8, y: 180 + i * 28, width: 18, height: 22, rx: 11, fill: col }, svg);
+    const t = svgel('text', { x: 32, y: 195 + i * 28, class: 'lc-num' }, svg);
+    t.textContent = ['01', '02', '03', '04'][i];
+  });
+  const counts = svgel('text', { x: 632, y: 344, 'text-anchor': 'end', class: 'lc-num' }, svg);
+  const alertTxt = svgel('text', { x: 632, y: 31, 'text-anchor': 'end', class: 'lc-alerttxt lc-nametxt' }, svg);
+  alertTxt.textContent = 'RED ALERT';
+
+  /* ship — lateral profile, saucer left, stardrive right */
+  const ship = svgel('g', {}, svg);
+  svgel('path', { d: 'M246,166 L292,192 L282,206 L236,180 Z', class: 'lc-ship' }, ship); // neck
+  svgel('path', { d: 'M282,186 L436,186 Q472,190 474,212 L474,224 Q470,238 430,240 L310,240 Q282,238 282,214 Z', class: 'lc-ship' }, ship); // hull
+  svgel('ellipse', { cx: 210, cy: 145, rx: 96, ry: 34, class: 'lc-ship' }, ship); // saucer
+  svgel('ellipse', { cx: 210, cy: 104, rx: 20, ry: 11, class: 'lc-ship' }, ship); // bridge
+  svgel('path', { d: 'M380,186 L398,74 L410,74 L400,186 Z', class: 'lc-ship' }, ship); // pylon 1
+  svgel('path', { d: 'M360,186 L378,110 L390,110 L378,186 Z', class: 'lc-ship' }, ship); // pylon 2
+  svgel('rect', { x: 306, y: 52, width: 216, height: 22, rx: 11, class: 'lc-ship' }, ship); // nacelle 1
+  svgel('rect', { x: 336, y: 90, width: 216, height: 22, rx: 11, class: 'lc-ship' }, ship); // nacelle 2
+  const nac1 = svgel('rect', { x: 316, y: 58, width: 196, height: 5, rx: 2.5, class: 'lc-nac' }, ship);
+  const nac2 = svgel('rect', { x: 346, y: 96, width: 196, height: 5, rx: 2.5, class: 'lc-nac' }, ship);
+  const deflector = svgel('circle', { cx: 298, cy: 246, r: 11, class: 'lc-ship' }, ship);
+  const defGlow = svgel('circle', { cx: 298, cy: 246, r: 15, fill: '#99ccff', opacity: .3, class: 'lc-glow' }, ship);
+
+  /* power flow: spine + pylons (reuses dashflow keyframes injected by m4) */
+  const mkFlow = (d) => {
+    const p = svgel('path', { d: d, class: 'lc-flow' }, svg);
+    p.classList.add('flow');
+    return p;
+  };
+  const flows = [
+    mkFlow('M210,150 C250,168 262,188 292,202 L448,212'),
+    mkFlow('M400,208 L410,76'),
+    mkFlow('M392,208 L424,112'),
+  ];
+
+  /* systems: child thread -> ship system; hotspot + callout */
+  const SYS = [
+    { sys: 'SENSORS',         hot: [130, 150], lbl: [8, 150] },
+    { sys: 'COMPUTER CORE',   hot: [272, 150], lbl: [492, 96] },
+    { sys: 'DIAGNOSTICS',     hot: [390, 212], lbl: [492, 206] },
+    { sys: 'NAVIGATION',      hot: [210, 104], lbl: [8, 66] },
+    { sys: 'LIBRARY COMPUTER',hot: [196, 176], lbl: [492, 300] },
+    { sys: 'DAMAGE CONTROL',  hot: [448, 228], lbl: [8, 306] },
+  ];
+  const ST = { running: ['ONLINE', '#99ccff'], 'needs-input': ['STANDBY', '#ffcc66'],
+    error: ['ALERT', '#ff5549'], done: ['NOMINAL', '#cc99cc'], idle: ['OFFLINE', '#5b6874'] };
+  const rows = SYS.map((s, i) => {
+    const lead = svgel('path', { d: 'M' + s.hot[0] + ',' + s.hot[1] + ' L' + (s.lbl[0] + 10) + ',' + (s.lbl[1] + 15) + ' L' + (s.lbl[0] + 24) + ',' + (s.lbl[1] + 15), class: 'lc-lead' }, svg);
+    const dot = svgel('circle', { cx: s.hot[0], cy: s.hot[1], r: 5 }, svg);
+    const halo = svgel('circle', { cx: s.hot[0], cy: s.hot[1], r: 9, fill: 'none', 'stroke-width': 1.5, class: 'lc-glow' }, svg);
+    const chip = svgel('rect', { x: s.lbl[0], y: s.lbl[1] + 3, width: 7, height: 30, rx: 3.5, class: 'lc-chip' }, svg);
+    const nm = svgel('text', { x: s.lbl[0] + 16, y: s.lbl[1] + 16, class: 'lc-nametxt' }, svg);
+    nm.textContent = s.sys;
+    const sub = svgel('text', { x: s.lbl[0] + 16, y: s.lbl[1] + 30, class: 'lc-subtxt' }, svg);
+    return { lead, dot, halo, chip, sub };
+  });
+
+  svgel('rect', { x: 4, y: 4, width: 632, height: 352, rx: 16, class: 'lc-frame' }, svg);
+  svgel('rect', { x: 4, y: 4, width: 632, height: 352, rx: 16, class: 'lc-alert-frame' }, svg);
+
+  RENDERERS.push({ update() {
+      const ks = SIM.kids;
+      const anyRun = ks.some(k => k.state === 'running');
+      const anyErr = ks.some(k => k.state === 'error');
+      const total = ks.reduce((a, k) => a + smooth(k), 0);
+      svg.classList.toggle('msd-alert', anyErr);
+      svg.classList.toggle('msd-cold', !anyRun);
+      const fd = clamp(1.7 - total / 40, 0.5, 1.7) + 's';
+      flows.forEach(f => { f.style.setProperty('--fd', fd); f.style.opacity = anyRun ? '' : '0.08'; });
+      defGlow.style.opacity = anyRun ? '' : '0.08';
+      nac1.style.opacity = nac2.style.opacity = anyRun ? '' : '0.08';
+      counts.textContent = ks.filter(k => k.state === 'running').length + ' RUNNING · ' +
+        ks.filter(k => k.state === 'needs-input').length + ' STANDBY · ' +
+        ks.filter(k => k.state === 'error').length + ' ALERT · CORE ' + CHIP[SIM.parentState];
+      ks.forEach((k, i) => {
+        const r = rows[i], [txt, col] = ST[k.state];
+        r.chip.setAttribute('fill', col);
+        r.chip.classList.toggle('err', k.state === 'error');
+        r.dot.setAttribute('fill', col);
+        r.halo.setAttribute('stroke', col);
+        r.halo.style.display = k.state === 'running' ? '' : 'none';
+        r.lead.setAttribute('stroke', col);
+        r.lead.setAttribute('opacity', k.state === 'done' ? '.35' : '');
+        r.lead.classList.toggle('err', k.state === 'error');
+        r.sub.textContent = k.name + ' · ' + txt;
+        r.sub.setAttribute('fill', k.state === 'error' ? '#ff8d85' : '#8fa0af');
       });
     } });
 }
