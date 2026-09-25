@@ -190,3 +190,10 @@ lies about stalls.
   should start by moving pulses off box-shadow.
 - Rate math for 5/9 needs a definition of "event" (tool call? any timeline
   row?) and a window (5 min? 30?).
+
+## Live mockups
+
+All ten are built as animated mockups on one page — one tab per design,
+driven by a shared simulated swarm (staggered starts, a first-out failure, a
+waiting child, a stall, completions, recovery):
+`docs/mockups/swarm-overview-mockups.html`
