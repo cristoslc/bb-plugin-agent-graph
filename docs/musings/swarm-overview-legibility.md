@@ -191,6 +191,24 @@ lies about stalls.
 - Rate math for 5/9 needs a definition of "event" (tool call? any timeline
   row?) and a window (5 min? 30?).
 
+## What "parent" and "child" mean (two nests)
+
+The plugin actually renders two different parent/child nests, and the designs
+in this musing live in the second one:
+
+1. **Inside a thread:** thread → turns → the active turn's actions (tool
+   calls, subagents, workflow agents). This is the single-thread view; the
+   "children" are steps of one turn.
+2. **Across threads:** parent thread → child threads. This is the sashay
+   swarm; the "children" are whole agents with their own turns.
+
+The overview problem this musing targets is nest 2: the bounded box is a
+parent thread and its swarm of children. But the ideas are nest-agnostic —
+semantic zoom (1), trend strips (9), and the gray board (2) apply just as
+well inside a thread, where a stalled turn's actions sit flat while the turn
+lamp stays green. A real implementation should treat nest level as a render
+parameter, not design the views twice. The mockup sim models nest 2.
+
 ## Live mockups
 
 All ten are built as animated mockups on one page — one tab per design,
