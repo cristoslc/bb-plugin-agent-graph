@@ -107,3 +107,18 @@ mockup must show motion/transition states, not static images.
 - Verified: smoke suite (11 tabs), screenshots at t=8 (all systems nominal/
   online), t=13.2 (red alert, DAMAGE CONTROL strobing), t=50 (mixed
   NOMINAL/STANDBY). Zero page errors.
+
+## 2026-09-25 15:45 — Footer cap regression, root cause this time
+
+- What: operator flagged the footer still left-hugging.
+- Found: the `.foot` width cap from the centering pass had not survived into
+  the file (same failure mode as the tabs cap earlier), and the duplicate
+  uncapped `.stage{overflow-x:auto}` rule was ALSO still present — my
+  removal edit had never landed there either. Earlier verification only
+  screenshotted stage/tab visuals, never measured chrome widths, so both
+  regressions passed.
+- Fixed: `.foot` capped at 996px and centered; duplicate `.stage` removed
+  for real (count now 1, verified by walking document.styleSheets).
+- Verification is now numeric: getBoundingClientRect on .top/.tabs/.sec.on/
+  .foot at 1600px — all four share centerline x=800 within 2px → PASS.
+  Footer screenshot confirms. Zero page errors.
