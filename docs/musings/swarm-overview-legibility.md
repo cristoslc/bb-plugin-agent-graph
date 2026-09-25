@@ -197,3 +197,44 @@ All ten are built as animated mockups on one page — one tab per design,
 driven by a shared simulated swarm (staggered starts, a first-out failure, a
 waiting child, a stall, completions, recovery):
 `docs/mockups/swarm-overview-mockups.html`
+
+## The two inverse purposes (added after the mockups)
+
+Watching the gray-board mockup made the purposes of the two surfaces click.
+They are inverses, not variants.
+
+**The thread board asks: what needs me?** bb is the operator's console. A
+thread that is no longer running is the important one, because it cannot take
+another turn until the operator does something. On that surface, emphasis
+belongs to blocked-on-operator states, and finished work should get out of
+the way.
+
+**The flow view asks: what is the shape of the work?** I want to read the
+swarm's action and status without understanding what any thread is doing in
+detail. There, activity is the signal, finished work is history that recedes,
+and nothing summons me.
+
+Same state set, opposite emphasis policies. The trap is designing one view to
+serve both. A gray board that dims "everything not running" would bury the
+most operator-important state in the plugin: needs-input. The thread is
+stalled, the plant is starved, and the display goes quiet exactly when it
+should not.
+
+The rule that reconciles them: **recede the successful, not the inactive.**
+Done work is normal operation completing normally; gray it out. Waiting and
+error are abnormal, the plant has stopped; they stay lit in every mode.
+Running is the motion layer. ISA-101 agrees: color means abnormal, and a
+stalled branch is abnormal even with no lamp flashing.
+
+The two surfaces stay separate on purpose:
+
+- Thread board / annunciator (3): sorted by operator actionability.
+  Waiting-on-you is the top of the board. This is bb's native job.
+- Flow surfaces (gray board 2, pipes 4, sankey 5, tracks 10): sorted by
+  activity and shape. Waiting reads as a shut valve, a still train, a thin
+  ribbon: absence of motion, still lit, but not a summons.
+
+If the agent graph ever becomes the place I visit to find out what needs me,
+it has stopped being a flow view. The mockups already split this way: tab 2
+keeps needs-input dashed-amber while done work fades, and tab 3 is where the
+attention sorting lives.
