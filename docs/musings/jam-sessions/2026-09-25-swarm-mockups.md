@@ -50,3 +50,14 @@ mockup must show motion/transition states, not static images.
   correct, zero page errors.
 - Also captured: operator's point that parent/child has two nests
   (thread→turns→actions vs parent thread→child threads) — added to the musing.
+
+## 2026-09-25 14:55 — Centered layout pass
+
+- What: operator reported sections hug left with no max-width; instruments
+  not centered.
+- Fixed: sections capped at 960px and centered; stage is now a centering
+  flex column; header/tab bar/footer share the same column; every inner
+  element (slider bar, legend, annunciator grid + note, trend lanes) gets
+  explicit width:100% + max-width:640px so it centers with its canvas.
+- Verified: screenshots at 1600px (tabs 1/3/6/7/8/9) and 620px (1/6/9),
+  zero page errors, smoke suite green.
